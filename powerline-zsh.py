@@ -32,9 +32,9 @@ class Color:
     REPO_DIRTY_FG = 15  # white
 
     CMD_PASSED_BG = 236
-    CMD_PASSED_FG = 15
-    CMD_FAILED_BG = 161
-    CMD_FAILED_FG = 15
+    CMD_PASSED_FG = 76
+    CMD_FAILED_BG = 236
+    CMD_FAILED_FG = 9
 
     SVN_CHANGES_BG = 148
     SVN_CHANGES_FG = 22  # dark green
@@ -208,10 +208,11 @@ def add_git_segment(powerline, cwd):
         branch = b'(Detached)'
 
     branch = branch.decode(encoding)
+    branch = '⭠ ' + branch
     has_pending_commits, has_untracked_files, origin_position = get_git_status()
     branch += origin_position
     if has_untracked_files:
-        branch += ' +'
+        branch += ' ±'
 
     bg = Color.REPO_CLEAN_BG
     fg = Color.REPO_CLEAN_FG
@@ -281,10 +282,12 @@ def add_virtual_env_segment(powerline, cwd):
 def add_root_indicator(powerline, error):
     bg = Color.CMD_PASSED_BG
     fg = Color.CMD_PASSED_FG
+    indicator = ' ✔'
     if int(error) != 0:
         fg = Color.CMD_FAILED_FG
         bg = Color.CMD_FAILED_BG
-    powerline.append(Segment(powerline, ' ❄', fg, bg))
+        indicator = ' ✘'
+    powerline.append(Segment(powerline, indicator, fg, bg))
 
 
 def get_valid_cwd():
